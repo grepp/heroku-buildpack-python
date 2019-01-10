@@ -38,7 +38,7 @@ if [ ! "$SKIP_INSTALL" ]; then
 
     mcount "version.python.$PYTHON_VERSION"
 
-    if ! tar zxvf /tmp/$PYTHON_VERSION.tar.gz -C .heroku/python &> /dev/null; then
+    if ! tar zxvf /tmp/binaries/$PYTHON_VERSION.tar.gz -C .heroku/python &> /dev/null; then
       puts-warn "Requested runtime ($PYTHON_VERSION) is not available for this stack ($STACK)."
       puts-warn "Aborting.  More info: https://devcenter.heroku.com/articles/python-support"
       exit 1
