@@ -2,9 +2,10 @@
 
 # shellcheck source=bin/utils
 source "$BIN_DIR/utils"
+SQLITE3_INSTALLED_DIR="/tmp/binaries/sqlite3"
 
 sqlite3_version() {
-  SQLITE3_VERSION=${SQLITE3_VERSION:-$(dpkg -s libsqlite3-0 | grep Version | sed 's/Version: //')}
+  SQLITE3_VERSION=${SQLITE3_VERSION:-$(cat "$SQLITE3_INSTALLED_DIR/version.txt")}
 
   export SQLITE3_VERSION
 }
@@ -17,22 +18,9 @@ sqlite3_install() {
   mkdir -p "$HEROKU_PYTHON_DIR"
 
   APT_CACHE_DIR="$HEROKU_PYTHON_DIR/apt/cache"
-  APT_STATE_DIR="$HEROKU_PYTHON_DIR/apt/state"
 
-  mkdir -p "$APT_CACHE_DIR/archives/partial"
-  mkdir -p "$APT_STATE_DIR/lists/partial"
-
-  APT_OPTIONS="-o debug::nolocking=true"
-  APT_OPTIONS="$APT_OPTIONS -o dir::cache=$APT_CACHE_DIR"
-  APT_OPTIONS="$APT_OPTIONS -o dir::state=$APT_STATE_DIR"
-  APT_OPTIONS="$APT_OPTIONS -o dir::etc::sourcelist=/etc/apt/sources.list"
-
-  apt-get $APT_OPTIONS update > /dev/null 2>&1
-  if [ -z "$HEADERS_ONLY" ]; then
-    apt-get $APT_OPTIONS -y -d --reinstall install libsqlite3-dev="$SQLITE3_VERSION" sqlite3="$SQLITE3_VERSION" > /dev/null 2>&1
-  else
-    apt-get $APT_OPTIONS -y -d --reinstall install libsqlite3-dev="$SQLITE3_VERSION"
-  fi
+  # copy pre-installed SQLite3 package.
+  cp -R "$SQLITE3_INSTALLED_DIR/apt" $HEROKU_PYTHON_DIR
 
   find "$APT_CACHE_DIR/archives/" -name "*.deb" -exec dpkg -x {} "$HEROKU_PYTHON_DIR/sqlite3/" \;
 
