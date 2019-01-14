@@ -2,7 +2,7 @@
 
 set +e
 runtime-fixer runtime.txt
-PYTHON_VERSION="python-3.6.7"
+PYTHON_VERSION="python-${PYTHON_VERSION}"
 
 # The location of the pre-compiled python binary.
 VENDORED_PYTHON="${VENDOR_URL}/runtimes/$PYTHON_VERSION.tar.gz"
