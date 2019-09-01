@@ -5,7 +5,7 @@ source "$BIN_DIR/utils"
 SQLITE3_INSTALLED_DIR="/tmp/binaries/sqlite3"
 
 sqlite3_version() {
-  SQLITE3_VERSION=${SQLITE3_VERSION:-$(cat "$SQLITE3_INSTALLED_DIR/version.txt")}
+  SQLITE3_VERSION="3.11.0-1ubuntu1.2"
 
   export SQLITE3_VERSION
 }

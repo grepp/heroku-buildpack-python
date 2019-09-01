@@ -10,9 +10,6 @@ jobs:
   include:
   - stage: Bash linting (shellcheck)
     sudo: false
-    before_install:
-    - wget -c https://goo.gl/ZzKHFv -O - | tar -xvJ -C /tmp/
-    - PATH="/tmp/shellcheck-latest:$PATH"
     script: make check
   - stage: Stack Unit Tests
     services: docker
@@ -21,10 +18,6 @@ jobs:
   - stage: Stack Unit Tests
     services: docker
     env: STACK=heroku-16
-    script: "./tests.sh"
-  - stage: Stack Unit Tests
-    services: docker
-    env: STACK=cedar-14
     script: "./tests.sh"
   - stage: Hatchet Integration
     script: "bundle exec rspec"
